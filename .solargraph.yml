@@ -1,0 +1,6 @@
+---
+reporters:
+- rubocop:version=1.56  # diagnostics
+formatter:
+  rubocop:
+    version: 1.56       # formatting

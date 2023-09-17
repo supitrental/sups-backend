@@ -20,5 +20,11 @@ module SupsBackend
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    # autoload
+    config.autoload_paths += Dir[Rails.root.join('app', 'components')]
+    config.autoload_paths += Dir[Rails.root.join('app', 'components', '*', 'models')]
+    config.autoload_paths += Dir[Rails.root.join('app', 'components', '*', 'workers')]
+    config.autoload_paths += Dir[Rails.root.join('app', 'components', '*', 'services')]
   end
 end
