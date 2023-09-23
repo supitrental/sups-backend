@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 20_230_919_154_307) do
+ActiveRecord::Schema[7.0].define(version: 20_230_921_050_443) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'plpgsql'
 
@@ -44,6 +44,21 @@ ActiveRecord::Schema[7.0].define(version: 20_230_919_154_307) do
     t.index ['client_id'], name: 'index_contacts_on_client_id'
   end
 
+  create_table 'contracts', force: :cascade do |t|
+    t.bigint 'client_id', null: false
+    t.bigint 'contact_id', null: false
+    t.bigint 'address_id', null: false
+    t.string 'billing_type', default: 'PREPAID'
+    t.integer 'billing_term', default: 7
+    t.boolean 'tax_inclusive', default: false
+    t.string 'notes'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.index ['address_id'], name: 'index_contracts_on_address_id'
+    t.index ['client_id'], name: 'index_contracts_on_client_id'
+    t.index ['contact_id'], name: 'index_contracts_on_contact_id'
+  end
+
   create_table 'jwt_deny_lists', force: :cascade do |t|
     t.string 'jti'
     t.datetime 'exp'
@@ -62,4 +77,7 @@ ActiveRecord::Schema[7.0].define(version: 20_230_919_154_307) do
 
   add_foreign_key 'addresses', 'clients'
   add_foreign_key 'contacts', 'clients'
+  add_foreign_key 'contracts', 'addresses'
+  add_foreign_key 'contracts', 'clients'
+  add_foreign_key 'contracts', 'contacts'
 end
