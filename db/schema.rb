@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 20_230_921_050_443) do
+ActiveRecord::Schema[7.0].define(version: 20_231_001_092_410) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'plpgsql'
 
@@ -67,6 +67,49 @@ ActiveRecord::Schema[7.0].define(version: 20_230_921_050_443) do
     t.index ['jti'], name: 'index_jwt_deny_lists_on_jti', unique: true
   end
 
+  create_table 'package_plans', force: :cascade do |t|
+    t.bigint 'package_id', null: false
+    t.string 'description', null: false
+    t.string 'billing_interval', default: 'MONTHLY'
+    t.integer 'bill_every', default: 1
+    t.decimal 'discount_value', default: '0.0'
+    t.string 'discount_type', default: '0.0'
+    t.decimal 'rate', default: '0.0'
+    t.decimal 'price', default: '0.0'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.index ['package_id'], name: 'index_package_plans_on_package_id'
+  end
+
+  create_table 'package_services', force: :cascade do |t|
+    t.bigint 'package_id', null: false
+    t.bigint 'service_id', null: false
+    t.decimal 'units', default: '1.0'
+    t.decimal 'unit_price', default: '0.0'
+    t.decimal 'price', default: '0.0'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.index ['package_id'], name: 'index_package_services_on_package_id'
+    t.index ['service_id'], name: 'index_package_services_on_service_id'
+  end
+
+  create_table 'packages', force: :cascade do |t|
+    t.string 'package_type', default: 'MAIN'
+    t.string 'description', null: false
+    t.decimal 'price', default: '0.0'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+  end
+
+  create_table 'services', force: :cascade do |t|
+    t.string 'description', null: false
+    t.decimal 'unit_price', default: '0.0'
+    t.string 'unit_type', default: 'PER_SERVICE'
+    t.string 'key', null: false
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+  end
+
   create_table 'users', force: :cascade do |t|
     t.string 'email', default: '', null: false
     t.string 'encrypted_password', default: '', null: false
@@ -80,4 +123,7 @@ ActiveRecord::Schema[7.0].define(version: 20_230_921_050_443) do
   add_foreign_key 'contracts', 'addresses'
   add_foreign_key 'contracts', 'clients'
   add_foreign_key 'contracts', 'contacts'
+  add_foreign_key 'package_plans', 'packages'
+  add_foreign_key 'package_services', 'packages'
+  add_foreign_key 'package_services', 'services'
 end

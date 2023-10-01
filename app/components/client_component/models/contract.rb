@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class Contract < ApplicationRecord
-  BILLING_PREPAID = 'prepaid'
-  BILLING_POSTPAID = 'postpaid'
+  BILLING_PREPAID = 'PREPAID'
+  BILLING_POSTPAID = 'POSTPAID'
   BILLING_TYPES = [Contract::BILLING_PREPAID, Contract::BILLING_POSTPAID].freeze
 
   belongs_to :client
